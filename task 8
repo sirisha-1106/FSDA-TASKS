@@ -1,0 +1,186 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>EmployeeManagement</artifactId>
+    <version>1.0</version>
+
+    <!-- Add dependency here -->
+
+</project>
+
+
+
+<dependencies>
+
+    <!-- Spring Context for IoC and Dependency Injection -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>5.3.30</version>
+    </dependency>
+
+</dependencies>
+
+
+
+
+package com.example.model;
+
+public class Employee {
+
+    private int id;
+    private String name;
+    private String department;
+
+    public Employee(int id, String name, String department) {
+        this.id = id;
+        this.name = name;
+        this.department = department;
+    }
+
+    public String toString() {
+        return id + " " + name + " " + department;
+    }
+}
+
+
+
+
+
+package com.example.repository;
+
+import java.util.*;
+import org.springframework.stereotype.Component;
+import com.example.model.Employee;
+
+@Component
+public class EmployeeRepository {
+
+    private List<Employee> list = new ArrayList<>();
+
+    public void addEmployee(Employee emp) {
+        list.add(emp);
+    }
+
+    public List<Employee> getAllEmployees() {
+        return list;
+    }
+}
+
+
+
+
+
+
+
+
+package com.example.repository;
+
+import java.util.*;
+import org.springframework.stereotype.Component;
+import com.example.model.Employee;
+
+@Component
+public class EmployeeRepository {
+
+    private List<Employee> list = new ArrayList<>();
+
+    public void addEmployee(Employee emp) {
+        list.add(emp);
+    }
+
+    public List<Employee> getAllEmployees() {
+        return list;
+    }
+}
+
+
+
+
+
+
+package com.example.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import com.example.model.Employee;
+import com.example.repository.EmployeeRepository;
+
+@Component
+public class EmployeeService {
+
+    @Autowired
+    private EmployeeRepository repository;
+
+    public void addEmployee(int id, String name, String dept) {
+        repository.addEmployee(new Employee(id, name, dept));
+    }
+
+    public void showEmployees() {
+        repository.getAllEmployees().forEach(System.out::println);
+    }
+}
+
+
+
+
+
+
+package com.example.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import com.example.model.Employee;
+import com.example.repository.EmployeeRepository;
+
+@Component
+public class EmployeeService {
+
+    @Autowired
+    private EmployeeRepository repository;
+
+    public void addEmployee(int id, String name, String dept) {
+        repository.addEmployee(new Employee(id, name, dept));
+    }
+
+    public void showEmployees() {
+        repository.getAllEmployees().forEach(System.out::println);
+    }
+}
+
+
+
+
+
+
+
+package com.example;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.example.config.AppConfig;
+import com.example.service.EmployeeService;
+
+public class MainApp {
+
+    public static void main(String[] args) {
+
+        BeanFactory factory =
+                new AnnotationConfigApplicationContext(AppConfig.class);
+
+        EmployeeService service =
+                factory.getBean(EmployeeService.class);
+
+        service.addEmployee(1, "Ram", "IT");
+        service.addEmployee(2, "John", "HR");
+
+        System.out.println("Employee Details:");
+        service.showEmployees();
+    }
+}
